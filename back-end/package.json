@@ -1,0 +1,21 @@
+{
+  "name": "back-end",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon inedex.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server": "^3.0.0",
+    "dotenv": "^10.0.0",
+    "graphql": "^15.5.1",
+    "mysql2": "^2.2.5",
+    "njwt": "^1.1.0",
+    "nodemon": "^2.0.12",
+    "secure-random": "^1.1.2"
+  }
+}
