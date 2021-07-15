@@ -37,8 +37,6 @@ const TypeDef = gql`
     type Channel{
         id: ID
         name: String
-        owner: User
-        members: [User]
     }
 
     type Message{

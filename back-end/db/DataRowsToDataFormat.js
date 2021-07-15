@@ -3,7 +3,9 @@ const toDataFormat = (dataRows, format) => {
     const modelOject = {...format.fields};
     dataRows.map(row => {
         Object.keys(format.fields).forEach((key) => {
-            modelOject[`${key}`] = row[format.fields[`${key}`]];
+            if(modelOject[`${key}`] != undefined){
+                modelOject[`${key}`] = row[format.fields[`${key}`]];
+            }
         });
         response.push({...modelOject});
     })

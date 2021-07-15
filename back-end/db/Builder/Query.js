@@ -52,13 +52,13 @@ const add = async (data, format) => {
     Object.keys(format.fields).forEach(key => {
         if (data[key] !== undefined && key !== 'id') {
             columns += `\`${format.fields[key]}\`, `;
-            values += `'${data[key]}', `;
+            values += `?, `;
         }
     });
     columns = columns.slice(0, -2);
     values = values.slice(0, -2);
     query += `(${columns}) VALUES (${values});`;
-    const [rows, allTodoFields] = await connection.query(query);
+    const [rows, allTodoFields] = await connection.query(query,Object.values(data));
     return await findById(rows.insertId, format);
 }
 
@@ -81,7 +81,14 @@ const deleteById = async (id, format) => {
     const [rows, allTodoFields] = await connection.query(query);
     return deletedObject;
 }
-
+/*const findByJoin = (condition, row, formatA, formatB) => {
+    const query = 'SELECT ';
+    Object.keys(row).forEach((key) => {
+        query += formatA[key] != undefined ? (formatA.fields[key]+', ') : (formatB.fields[key]+', ');
+    })
+    query = query.slice(0, -2);
+    query += ' FROM ' + formatA.table + ' INNER JOIN ' + formatB.table + ' ON ' + 
+}*/
 module.exports.QueryBuilder = {
     findAll: findAll,
     findById: findById,

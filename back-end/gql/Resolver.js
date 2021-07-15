@@ -48,16 +48,12 @@ const Resolver = {
                 status: 200
             };
         },
-        
+
         createChannel: async (obj, args, context, info) => {
-            if(context.user == null){
+            if(context.user === null){
                 throw new Error("You must be connected !");
             }
-            const newChannel = {
-                name: args.name,
-                owner: context.user
-            }
-            return await ChannelService.createChannel(context.user, newChannel);
+            return await ChannelService.createChannel(context.user, args.name);
         },
 
         setChannelName: async (obj, args, context, info) => {
@@ -66,7 +62,7 @@ const Resolver = {
             }
             let newChannel = {
                 id: args.id,
-                name: args.name,
+                name: args.name
             }
             newChannel = await ChannelService.setChannelName(context.user, newChannel);
             if(newChannel == null){
@@ -85,6 +81,12 @@ const Resolver = {
             }
             return deletedChannel;
         },
+/*         getMyChannels: async (obj, args, context, info) => {
+            if(context.user == null){
+                throw new Error("You must be connected !");
+            }
+            const deletedChannel = await ChannelService.deleteChannel(context.user, args.id);
+        } */
     },
 };
 

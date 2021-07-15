@@ -17,10 +17,10 @@ const server = new ApolloServer({
         }
         try {
             const verifiedJwt = JWT.verify(token, process.env.SECRET_KEY);
-            //console.log(verifiedJwt);
             return { user: verifiedJwt.body};
         } catch (e) {
             //Exp handl
+            //console.log(e);
             console.log(e);
             return {user: null}
         }
