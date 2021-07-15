@@ -17,32 +17,27 @@ const findById = async (id, format) => {
         const query = 'SELECT * FROM `' + format.table + '` WHERE `' + format.fields['id'] + '` = ?';
         const [rows, allTodoFields] = await connection.query(query, [id]);
         const result = toDataFormat(rows, format);
-        return result[0];
+        return result;
     } catch (e) {
         console.log('format');
         console.log(format);
         console.log(`Erruer findById ${e}`);
     }
 }
-/*
-condition: {
-    // ((C or D) and (B or D))
-    and: {
-        or: {email: "a@a", password: "aze"},
-        and: {name: "bahae", id: 15}
-    }
-}
-*/
-const conditionMaker = (condition, format) => {
 
-};
-
+// consition {email: 'x@x.x', name:'y'} => Where email = 'x@x.x'And name = 'y'
  const findBy = async (condition, format) => {
     try {
-        const query = 'SELECT * FROM `' + format.table + '` WHERE `' + format.fields['id'] + '` = ?';
-        const [rows, allTodoFields] = await connection.query(query, [id]);
+        let where = "( ";
+        for(const key in condition){
+            where += `\`${format.fields[key]}\` = ? AND `;
+        }
+        where = where.slice(0, -4);
+        where += ")";
+        const query = 'SELECT * FROM `' + format.table + '` WHERE ' + where;
+        const [rows, allTodoFields] = await connection.query(query, Object.values(condition));
         const result = toDataFormat(rows, format);
-        return result[0];
+        return result;
     } catch (e) {
         console.log('format');
         console.log(format);
@@ -75,9 +70,8 @@ const setById = async (data, format) => {
         }
     });
     query = query.slice(0, -2);
-    query += ` WHERE \`id\` = ${data.id};`
-    console.log(query);
-    const [rows, allTodoFields] = await connection.query(query);
+    query += ` WHERE \`id\` = ?;`;
+    const [rows, allTodoFields] = await connection.query(query, [data.id]);
     return await findById(data.id, format);
 }
 
@@ -94,5 +88,5 @@ module.exports.QueryBuilder = {
     add: add,
     setById: setById,
     deleteById: deleteById,
-    conditionMaker: conditionMaker
+    findBy: findBy
 }

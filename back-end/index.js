@@ -6,36 +6,32 @@ const fs = require('fs');
 const dotenv = require('dotenv');
 dotenv.config();
 const JWT = require('njwt');
-const {QueryBuilder} = require('./db/Builder/Query');
+const { QueryBuilder } = require('./db/Builder/Query');
 const UserForma = require('./db/DataFormat/User')
-const c = {
-    and: {
-        or: {email: "a@a", password: "aze"},
-        name: "maki",
-        // and: {name: "bahae", id: 15}
-    }
-};
-const q = QueryBuilder.conditionMaker(c, UserForma);
-console.log(q);
 
 const server = new ApolloServer({
     typeDefs: TypeDef, resolvers: Resolver, context: ({ req }) => {
-        token = req.headers['authorization'] && req.headers['authorization'].split(' ')[1];
-        //console.log(token);
+        const token = req.headers['authorization'] && req.headers['authorization'].split(' ')[1];
         if (token == null) {
-            return { jwt: null };
+            return { user: null };
         }
         try {
-            verifiedJwt = JWT.verify(token, process.env.SECRET_KEY);
-            return {jwt: verifiedJwt.body};
+            const verifiedJwt = JWT.verify(token, process.env.SECRET_KEY);
+            //console.log(verifiedJwt);
+            return { user: verifiedJwt.body};
         } catch (e) {
             //Exp handl
-            console.log({jwt: e.parsedBody});
+            console.log(e);
+            return {user: null}
         }
     }
 });
 if (process.env.SECRET_KEY === undefined) {
-    fs.writeFile('./.env', 'SECRET_KEY=' + secureRandom(256, { type: 'Buffer' }), { flag: 'a' }, err => { console.log(err) });
+    fs.writeFile(
+        './.env', 'SECRET_KEY=' + secureRandom(256, { type: 'Buffer' }),
+        { flag: 'a' },
+        err => { console.log(err) }
+    );
 }
 server.listen().then(({ url }) => {
     console.log(`🚀  Server ready at ${url}`);
