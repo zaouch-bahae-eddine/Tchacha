@@ -2,6 +2,8 @@ const { ApolloError } = require("apollo-server");
 const { AuthService } =require('../service/AuthService');
 const { ChannelService } = require("../service/ChannelService");
 const { JWTService } = require('../service/JWTService');
+const { MessageService } = require('../service/MessageService');
+
 const Resolver = {
     TokenOrErrer: {
         __resolveType: obj => {
@@ -100,7 +102,37 @@ const Resolver = {
                 throw new Error("permission denied!");
             }
             return members;
-        }
+        },
+        addMessage: async (obj, args, context, info) => {
+            if(context.user == null){
+                throw new Error("You must be connected !");
+            }
+            const message = await MessageService.addMessage(context.user, args.channel, args.text);
+            if(message === null){
+                throw new Error("permission denied!");
+            }
+            return message;
+        },
+        setMessage: async (obj, args, context, info) => {
+            if(context.user == null){
+                throw new Error("You must be connected !");
+            }
+            const message = await MessageService.setMessage(context.user, args.msgId, args.text);
+            if(message === null){
+                throw new Error("permission denied!");
+            }
+            return message;
+        },
+        rmMessage: async (obj, args, context, info) => {
+            if(context.user == null){
+                throw new Error("You must be connected !");
+            }
+            const message = await MessageService.rmMessage(context.user, args.msgId);
+            if(message === null){
+                throw new Error("permission denied!");
+            }
+            return message;
+        },
     },
     Query: {
         getMembers: async (obj, args, context, info) => {

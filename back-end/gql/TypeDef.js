@@ -15,6 +15,10 @@ const TypeDef = gql`
 
         addMemberToChannel(email: String!, channel: ID!): [User]
         rmMemberFromChannel(email: String!, channel: ID!): [User]
+
+        addMessage(channel: ID!, text: String!): Message
+        setMessage(msgId: ID!, text: String!): Message
+        rmMessage(msgId: ID!): Message
     }
 
     type Error {
@@ -44,8 +48,8 @@ const TypeDef = gql`
     type Message{
         id: ID
         text: String
-        owner: User
-        channel: Channel
+        user: Int,
+        channel: Int
     }
 
     type Token {
