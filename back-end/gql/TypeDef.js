@@ -2,8 +2,7 @@ const { gql } = require("apollo-server");
 
 const TypeDef = gql`
     type Query{
-        getChannels: [Channel]
-        getMyChannels: [Channel]
+        getMembers(channel: ID!): [User]
     }
 
     type Mutation {
@@ -13,6 +12,9 @@ const TypeDef = gql`
         createChannel(name: String!): Channel
         setChannelName(id: ID!, name: String!): Channel
         deleteChannel(id: ID!): Channel
+
+        addMemberToChannel(email: String!, channel: ID!): [User]
+        rmMemberFromChannel(email: String!, channel: ID!): [User]
     }
 
     type Error {

@@ -81,19 +81,29 @@ const deleteById = async (id, format) => {
     const [rows, allTodoFields] = await connection.query(query);
     return deletedObject;
 }
-/*const findByJoin = (condition, row, formatA, formatB) => {
-    const query = 'SELECT ';
-    Object.keys(row).forEach((key) => {
-        query += formatA[key] != undefined ? (formatA.fields[key]+', ') : (formatB.fields[key]+', ');
-    })
-    query = query.slice(0, -2);
-    query += ' FROM ' + formatA.table + ' INNER JOIN ' + formatB.table + ' ON ' + 
-}*/
+
+const getMembers = async (condition, formatResult, formatCondition) => {
+    let where = " WHERE ( ";
+    for(const key in condition){
+        where += `\`${formatCondition.fields[key]}\` = ? AND `;
+    }
+    where = where.slice(0, -4);
+    where +=" )";
+    const query = "SELECT u.id, u.name, u.email, uc.channel_id FROM user AS u "+
+        "INNER JOIN user_channel AS uc ON u.id = uc.user_id " + where;
+        console.log('query =>', query);
+    const [rows, allTodoFields] = await connection.query(query, Object.values(condition));
+    const result = toDataFormat(rows, formatResult);
+    console.log("resultat => ", result);
+    return result;
+}
+
 module.exports.QueryBuilder = {
-    findAll: findAll,
-    findById: findById,
-    add: add,
-    setById: setById,
-    deleteById: deleteById,
-    findBy: findBy
+    findAll,
+    findById,
+    add,
+    setById,
+    deleteById,
+    findBy,
+    getMembers
 }

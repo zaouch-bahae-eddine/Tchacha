@@ -81,13 +81,36 @@ const Resolver = {
             }
             return deletedChannel;
         },
-/*         getMyChannels: async (obj, args, context, info) => {
+        addMemberToChannel: async (obj, args, context, info) => {
             if(context.user == null){
                 throw new Error("You must be connected !");
             }
-            const deletedChannel = await ChannelService.deleteChannel(context.user, args.id);
-        } */
+            const members = await ChannelService.addMemberToChannel(context.user, args.email, args.channel);
+            if(members === null){
+                throw new Error("permission denied!");
+            }
+            return members;
+        },
+        rmMemberFromChannel: async (obj, args, context, info) => {
+            if(context.user == null){
+                throw new Error("You must be connected !");
+            }
+            const members = await ChannelService.rmMemberFromChannel(context.user, args.email, args.channel);
+            if(members === null){
+                throw new Error("permission denied!");
+            }
+            return members;
+        }
     },
+    Query: {
+        getMembers: async (obj, args, context, info) => {
+            if(context.user == null){
+                throw new Error("You must be connected !");
+            }
+            const members = await ChannelService.getMembers(context.user, args.channel);
+            return members;
+        }
+    }
 };
 
 module.exports = Resolver;

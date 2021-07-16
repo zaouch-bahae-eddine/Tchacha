@@ -33,27 +33,54 @@ const deleteChannel = async (user, id) => {
 }
 
 const addMemberToChannel = async (user, memberEmail, channelId) => {
-    const oldUserChannel = await QueryBuilder.findBy({user: user.id, channel: channelId, owner: 1}, UserChannelFormat);
-    if(oldUserChannel == null){
+    const allowed = await QueryBuilder.findBy({user: user.id, channel: channelId, owner: 1}, UserChannelFormat);
+
+    if(allowed == null){
         return null;
     }
     const member = await QueryBuilder.findBy({email: memberEmail}, UserFormat);
     if(member === null){
         return null;
     }
-    const newMumber = await QueryBuilder.add({user: member.id, channel: channelId}, UserChannelFormat);
+    try{
+        await QueryBuilder.add({user: member.id, channel: channelId, owner: 0}, UserChannelFormat);
+        return await QueryBuilder.getMembers({channel: channelId}, UserFormat, UserChannelFormat);
+    } catch(e){
+        console.log(e);
+        return await QueryBuilder.getMembers({channel: channelId}, UserFormat, UserChannelFormat);
+    }
 }
-
-const getAllMember = async (user, channelId) => {
-    const allowed = QueryBuilder.findBy({user: user.id, channel: channelId}, UserChannelFormat);
+const rmMemberFromChannel = async (user, memberEmail, channelId) => {
+    const allowed = await QueryBuilder.findBy({user: user.id, channel: channelId, owner: 1}, UserChannelFormat);
+    if(allowed == null){
+        return null;
+    }
+    const member = await QueryBuilder.findBy({email: memberEmail}, UserFormat);
+    const group = await QueryBuilder.findBy({user: member.id, channel: channelId}, UserChannelFormat);
+    if(member === null || group === null){
+        return null;
+    }
+    try{
+        await QueryBuilder.deleteById(group.id, UserChannelFormat);
+        return await QueryBuilder.getMembers({channel: channelId}, UserFormat, UserChannelFormat);
+    } catch(e){
+        console.log(e);
+        return await QueryBuilder.getMembers({channel: channelId}, UserFormat, UserChannelFormat);
+    }
+}
+const getMembers = async (user, channelId) => {
+    const allowed = await QueryBuilder.findBy({user: user.id, channel: channelId}, UserChannelFormat);
     if(allowed === null){
         return null;
     }
-    const members = QueryBuilder.findBy({channel: channelId}, UserChannelFormat);
-    
+    const members = await QueryBuilder.getMembers({channel: channelId}, UserFormat, UserChannelFormat);
+    return members;
 }
 module.exports.ChannelService = {
     createChannel,
     setChannelName,
-    deleteChannel
+    deleteChannel,
+    getMembers,
+    addMemberToChannel,
+    rmMemberFromChannel
 };
