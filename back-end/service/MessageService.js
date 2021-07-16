@@ -38,16 +38,29 @@ const rmMessage = async (user, msgId, message) => {
         if (myMessage === null) {
             return null;
         }
-        const messagedeleted = await QueryBuilder.deleteById(myMessage.id, MessageFormat);
-        console.log(messagedeleted);
-        return messagedeleted;
+        return await QueryBuilder.deleteById(myMessage.id, MessageFormat);
+
     } catch (e) {
         console.log(e);
         return null;
     }
 }
+const getMessage = async (user, channel) => {
+    try{
+        const isMemeber = await QueryBuilder.findBy({user: user.id, channel: channel}, UserChannelFormat);
+        if(isMemeber === null){
+            return null;
+        }
+        return await QueryBuilder.findBy({channel: channel}, MessageFormat);
+    }catch(e){
+        console.log(e);
+        return null;
+    }
+}
+
 module.exports.MessageService = {
     addMessage,
     setMessage,
-    rmMessage
+    rmMessage,
+    getMessage
 }

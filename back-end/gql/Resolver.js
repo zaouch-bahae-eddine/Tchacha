@@ -133,6 +133,16 @@ const Resolver = {
             }
             return message;
         },
+        getMessage: async (obj, args, context, info) => {
+            if(context.user == null){
+                throw new Error("You must be connected !");
+            }
+            const messages = await MessageService.getMessage(context.user, args.channel);
+            if(messages === null){
+                throw new Error("permission denied!");
+            }
+            return messages;
+        },
     },
     Query: {
         getMembers: async (obj, args, context, info) => {

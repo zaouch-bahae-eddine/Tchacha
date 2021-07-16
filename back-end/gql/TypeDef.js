@@ -19,6 +19,7 @@ const TypeDef = gql`
         addMessage(channel: ID!, text: String!): Message
         setMessage(msgId: ID!, text: String!): Message
         rmMessage(msgId: ID!): Message
+        getMessage(channel: ID!) : [Message]
     }
 
     type Error {
