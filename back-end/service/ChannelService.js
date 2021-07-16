@@ -10,8 +10,8 @@ const createChannel = async (user, name) => {
 }
 
 const setChannelName = async (user, data) => {
-    const oldUserChannel = await QueryBuilder.findBy({user: user.id, channel: data.id, owner: 1}, UserChannelFormat);
-    if(oldUserChannel == null){
+    const ownerUser = await QueryBuilder.findBy({user: user.id, channel: data.id, owner: 1}, UserChannelFormat);
+    if(ownerUser == null){
         return null;
     }
     const newChannel = await QueryBuilder.setById(data, ChannelFormat);
@@ -19,17 +19,12 @@ const setChannelName = async (user, data) => {
 }
 
 const deleteChannel = async (user, id) => {
-    const oldChannel = await QueryBuilder.findById(id, ChannelFormat);
-    if(oldChannel === null){
+    const existChannel = await QueryBuilder.findById(id, ChannelFormat);
+    if(existChannel === null){
         return null;
     }
-    const oldUserChannel = await QueryBuilder.findBy({user: user.id, channel: id, owner: 1}, UserChannelFormat);
-    if(oldUserChannel == null){
-        return null;
-    }
-    await QueryBuilder.deleteById(oldUserChannel.id, UserChannelFormat);
-    QueryBuilder.deleteById(oldChannel.id, ChannelFormat);
-    return oldChannel;
+    await QueryBuilder.deleteById(existChannel.id, ChannelFormat);
+    return existChannel;
 }
 
 const addMemberToChannel = async (user, memberEmail, channelId) => {
