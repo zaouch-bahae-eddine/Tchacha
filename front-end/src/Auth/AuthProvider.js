@@ -35,9 +35,9 @@ const useProvideAuth = () => {
     });
     const [RegisterMutation] = useMutation(REGISTER, {
         onCompleted: (data) => {
-            if(data.login.status === 200){
-                localStorage.setItem('token', data.login.jwt);
-                setUser(JSON.parse(atob(data.login.jwt.split('.')[1])));
+            if(data.register.status >= 200 && data.register.status < 300){
+                localStorage.setItem('token', data.register.jwt);
+                setUser(JSON.parse(atob(data.register.jwt.split('.')[1])));
             }
         }
     });

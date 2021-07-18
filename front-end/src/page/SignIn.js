@@ -3,8 +3,9 @@ import { Redirect } from 'react-router-dom';
 import styled from 'styled-components'
 import { useAuth } from '../Auth/AuthProvider';
 import AlertMessage from '../Component/AlertMessage';
+import { FormStyle } from '../Component/FormStyle';
+import { TitleStyle } from '../Component/TitleStyle';
 
-const StyledForm = styled.form``;
 function SignIn() {
     const [credential, setCredential] = useState({
         email: "",
@@ -37,20 +38,24 @@ function SignIn() {
     }
     return (
         <div>
-            SignIn page
-            <StyledForm>
+            <TitleStyle>Sign in</TitleStyle>
+            <FormStyle>
                 {
                     auth.user != null ? <Redirect to="/" /> : ""
                 }
                 {
                     alertMessage.display ? <AlertMessage message={alertMessage.msg} /> : ""
                 }
-                <label htmlFor="email">Email </label>
-                <input id="email" name="email" value={credential.email} onChange={(e) => inputChangeHandler(e)} />
-                <label htmlFor="password">Password </label>
-                <input id="password" name="password" value={credential.password} onChange={(e) => inputChangeHandler(e)} />
+                <div>
+                    <label htmlFor="email">Email </label>
+                    <input id="email" name="email" value={credential.email} onChange={(e) => inputChangeHandler(e)} />
+                </div>
+                <div>
+                    <label htmlFor="password">Password </label>
+                    <input type="password" id="password" name="password" value={credential.password} onChange={(e) => inputChangeHandler(e)} />
+                </div>
                 <button onClick={e => loginHandler(e)}>Login</button>
-            </StyledForm>
+            </FormStyle>
         </div>
     )
 }
