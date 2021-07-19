@@ -97,6 +97,21 @@ const getMembers = async (condition, formatResult, formatCondition) => {
     console.log("resultat => ", result);
     return result;
 }
+const getChannels = async (condition, formatResult, formatCondition) => {
+    let where = " WHERE ( ";
+    for(const key in condition){
+        where += `\`${formatCondition.fields[key]}\` = ? AND `;
+    }
+    where = where.slice(0, -4);
+    where +=" )";
+    const query = "SELECT c.id, c.name  FROM user_channel AS uc "+
+        "INNER JOIN channel AS c ON c.id = uc.channel_id " + where;
+        console.log('query =>', query);
+    const [rows, allTodoFields] = await connection.query(query, Object.values(condition));
+    const result = toDataFormat(rows, formatResult);
+    console.log("resultat => ", result);
+    return result;
+}
 
 module.exports.QueryBuilder = {
     findAll,
@@ -105,5 +120,6 @@ module.exports.QueryBuilder = {
     setById,
     deleteById,
     findBy,
-    getMembers
+    getMembers,
+    getChannels
 }

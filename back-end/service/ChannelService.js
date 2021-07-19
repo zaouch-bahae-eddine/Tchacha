@@ -3,6 +3,19 @@ const UserFormat = require('../db/DataFormat/User');
 const ChannelFormat = require('../db/DataFormat/Channel');
 const UserChannelFormat = require('../db/DataFormat/UserChannel');
 
+const getChaneById = async (user, channelId) => {
+    const channel = await QueryBuilder.getChannels({user: user.id, channel: channelId},ChannelFormat, UserChannelFormat);
+    return channel;
+}
+
+const getChannels = async (user) => {
+    const channels = await QueryBuilder.getChannels({user: user.id},ChannelFormat, UserChannelFormat);
+    if (channels.length === undefined){
+        return [channels];
+    }
+    return channels;
+}
+
 const createChannel = async (user, name) => {
     const newChannel = await QueryBuilder.add({name: name}, ChannelFormat);
     await QueryBuilder.add({user: user.id, channel: newChannel.id, owner: 1}, UserChannelFormat);
@@ -69,13 +82,18 @@ const getMembers = async (user, channelId) => {
         return null;
     }
     const members = await QueryBuilder.getMembers({channel: channelId}, UserFormat, UserChannelFormat);
+    if(members.length === undefined){
+        return [members];
+    }
     return members;
 }
 module.exports.ChannelService = {
+    getChannels,
+    getChaneById,
     createChannel,
     setChannelName,
     deleteChannel,
     getMembers,
     addMemberToChannel,
-    rmMemberFromChannel
+    rmMemberFromChannel,
 };

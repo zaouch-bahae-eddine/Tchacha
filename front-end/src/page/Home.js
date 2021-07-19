@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../Auth/AuthProvider';
 import Tchatchat from './Tchatchat';
+import Channel from './Channel';
 const HomeTitle = styled.h1`
     display: flex;
     align-items: center;
@@ -41,7 +42,7 @@ function Home() {
                                 <SignupLink to="/register">Sign up</SignupLink>
                             </NavigationContainer>
                         </Fragment> 
-                : <Tchatchat />
+                : <Channel />
             }
         </Fragment>
     )

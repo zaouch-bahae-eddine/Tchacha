@@ -2,6 +2,8 @@ const { gql } = require("apollo-server");
 
 const TypeDef = gql`
     type Query{
+        getChaneById(channelId: ID!) : Channel
+        getChannels: [Channel]
         getMembers(channel: ID!): [User]
     }
 

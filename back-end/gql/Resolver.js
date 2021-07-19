@@ -151,6 +151,20 @@ const Resolver = {
             }
             const members = await ChannelService.getMembers(context.user, args.channel);
             return members;
+        },
+        getChaneById: async (obj, args, context, info) => {
+            if(context.user == null){
+                throw new Error("You must be connected !");
+            }
+            const channel = await ChannelService.getChaneById(context.user, args.channelId);
+            return channel;
+        },
+        getChannels: async (obj, args, context, info) => {
+            if(context.user == null){
+                throw new Error("You must be connected !");
+            }
+            const channels = await ChannelService.getChannels(context.user);
+            return channels;
         }
     }
 };
