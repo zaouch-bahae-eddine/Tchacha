@@ -19,7 +19,7 @@ const useProvideAuth = () => {
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-        if(localStorage.getItem('token') != ""){
+        if(localStorage.getItem('token') != "" && localStorage.getItem('token') != undefined){
             const userToken =  localStorage.getItem('token').split('.')[1];
             setUser(JSON.parse(atob(userToken)));
         }

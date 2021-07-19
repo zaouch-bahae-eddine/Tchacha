@@ -77,11 +77,13 @@ function Channel() {
             </Modal>
             <ChannelContainer dispalayChannelModal={dispalayChannelModal}>
                 {
+                    data.channels != null ?
                     data.channels.map(channel => <ChannelItem
                         key={channel.id}
                         data={channel}
                         dispalayChannelModal={dispalayChannelModal}
                         refetch={refetch} />)
+                    : ""
                 }
             </ChannelContainer>
         </Fragment>

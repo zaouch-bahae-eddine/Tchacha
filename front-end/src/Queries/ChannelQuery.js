@@ -57,6 +57,16 @@ export const ADD_MEMBER = gql`
         }
     }
 `;
+export const DELETE_MEMBER = gql`
+    mutation RmMemberFromChannelMutation($rmMemberFromChannelEmail: String!, $rmMemberFromChannelChannel: ID!) {
+        rmMemberFromChannel(email: $rmMemberFromChannelEmail, channel: $rmMemberFromChannelChannel) {
+            id
+            name
+            email
+            __typename
+        }
+    }
+`;
 export const GET_CHANNEL_BY_ID = gql`
     query Query($getChaneByIdChannelId: ID!) {
         channel: getChaneById(channelId: $getChaneByIdChannelId) {

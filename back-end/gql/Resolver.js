@@ -87,21 +87,21 @@ const Resolver = {
             if(context.user == null){
                 throw new Error("You must be connected !");
             }
-            const members = await ChannelService.addMemberToChannel(context.user, args.email, args.channel);
-            if(members === null){
+            const member = await ChannelService.addMemberToChannel(context.user, args.email, args.channel);
+            if(member === null){
                 throw new Error("permission denied!");
             }
-            return members;
+            return member;
         },
         rmMemberFromChannel: async (obj, args, context, info) => {
             if(context.user == null){
                 throw new Error("You must be connected !");
             }
-            const members = await ChannelService.rmMemberFromChannel(context.user, args.email, args.channel);
-            if(members === null){
-                throw new Error("permission denied!");
+            const member = await ChannelService.rmMemberFromChannel(context.user, args.email, args.channel);
+            if(member === null){
+                throw new ApolloError("permission denied!");
             }
-            return members;
+            return member;
         },
         addMessage: async (obj, args, context, info) => {
             if(context.user == null){

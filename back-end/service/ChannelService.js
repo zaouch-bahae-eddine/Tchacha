@@ -10,7 +10,7 @@ const getChaneById = async (user, channelId) => {
 
 const getChannels = async (user) => {
     const channels = await QueryBuilder.getChannels({user: user.id},ChannelFormat, UserChannelFormat);
-    if (channels.length === undefined){
+    if (channels != null && channels.length === undefined){
         return [channels];
     }
     return channels;
@@ -65,15 +65,15 @@ const rmMemberFromChannel = async (user, memberEmail, channelId) => {
     }
     const member = await QueryBuilder.findBy({email: memberEmail}, UserFormat);
     const group = await QueryBuilder.findBy({user: member.id, channel: channelId}, UserChannelFormat);
-    if(member === null || group === null){
+    if(member === null || group === null || user.id === member.id){
         return null;
     }
     try{
         await QueryBuilder.deleteById(group.id, UserChannelFormat);
-        return await QueryBuilder.getMembers({channel: channelId}, UserFormat, UserChannelFormat);
+        return member;
     } catch(e){
         console.log(e);
-        return await QueryBuilder.getMembers({channel: channelId}, UserFormat, UserChannelFormat);
+        return null;
     }
 }
 const getMembers = async (user, channelId) => {
@@ -82,7 +82,7 @@ const getMembers = async (user, channelId) => {
         return null;
     }
     const members = await QueryBuilder.getMembers({channel: channelId}, UserFormat, UserChannelFormat);
-    if(members.length === undefined){
+    if(members != null && members.length === undefined){
         return [members];
     }
     return members;

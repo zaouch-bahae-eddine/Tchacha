@@ -15,8 +15,8 @@ const TypeDef = gql`
         setChannelName(id: ID!, name: String!): Channel
         deleteChannel(id: ID!): Channel
 
-        addMemberToChannel(email: String!, channel: ID!): [User]
-        rmMemberFromChannel(email: String!, channel: ID!): [User]
+        addMemberToChannel(email: String!, channel: ID!): User
+        rmMemberFromChannel(email: String!, channel: ID!): User
 
         addMessage(channel: ID!, text: String!): Message
         setMessage(msgId: ID!, text: String!): Message

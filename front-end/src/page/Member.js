@@ -2,6 +2,7 @@ import { useQuery } from '@apollo/client';
 import React, { Fragment, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import MemberContainer from '../Component/MemberContainer';
+import MemberItem from '../Component/MemberItem';
 import Modal from '../Component/Modal';
 import MemberForm from '../Form/MemberFrom';
 import { GET_CHANNEL_BY_ID, MEMBERS_CHANNEL } from '../Queries/ChannelQuery';
@@ -64,7 +65,9 @@ function Member() {
 
                 <MemberContainer colomunTitle={getChannelById.data.channel.name} dispalayMemberModal={dispalayMemberModal}>
                     {
-                        data.members.map(member => <div key={member.id}> {member.name} {member.email}</div>)
+                        data.members != null?
+                        data.members.map(member => <MemberItem data={member} key={member.id} refetch={refetch} channelId={id} />)
+                        : ""
                     }
                 </MemberContainer>
             </Fragment>
