@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client';
 import React, { useState } from 'react'
 import { AiOutlineDelete, AiOutlineEdit, AiOutlineSetting } from 'react-icons/ai';
-import {BiGroup} from 'react-icons/bi'
+import { BiGroup } from 'react-icons/bi'
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { DELETE_CHANNEL } from '../Queries/ChannelQuery';
@@ -58,34 +58,42 @@ const ChannelNameStyle = styled.div`
     font-size: 18pt;
     width: 90%;
 `;
+const ToMessagesStyle = styled(Link)`
+    display: block;
+    position: absolute;
+    width: 230px;
+    height: 51px;
+    z-index: 9;
+`;
 function ChannelItem(props) {
     const [displaySetting, setDisplaySetting] = useState(false);
     const toggelSetting = () => {
         setDisplaySetting((prev) => !prev);
     }
-    const [deleteChannelMutation, {data}] = useMutation(DELETE_CHANNEL,{
+    const [deleteChannelMutation, { data }] = useMutation(DELETE_CHANNEL, {
         update: () => props.refetch(),
-        onCompleted: (data) => {console.log(data)}
+        onCompleted: (data) => { console.log(data) }
     })
     const deleteChannel = (id) => {
-        deleteChannelMutation({variables: {deleteChannelId: id} });
+        deleteChannelMutation({ variables: { deleteChannelId: id } });
     }
     return (
         <ChannelItemStyle>
             <div>
                 <ChannelHeader>
-                    <ChannelNameStyle>{props.data.name}</ChannelNameStyle>
+                    <ToMessagesStyle to={"/messages/" + props.data.id}></ToMessagesStyle>
+                        <ChannelNameStyle>{props.data.name}</ChannelNameStyle>
                     <div onClick={() => toggelSetting()}>
                         <AiOutlineSetting />
                         <SettingMenuStyle color="#32d0ff" size="110px" visible={displaySetting}>
                             <li onClick={() => props.dispalayChannelModal(props.data)}><AiOutlineEdit /> <span>Edit</span></li>
                             <li onClick={() => props.dispalayChannelModal(props.data)}><MembersLink to={"/members/" + props.data.id}><BiGroup /> <span>Membres</span></MembersLink></li>
-                            <li onClick={()=> deleteChannel(props.data.id)}><AiOutlineDelete /> <span>Delete</span></li>
+                            <li onClick={() => deleteChannel(props.data.id)}><AiOutlineDelete /> <span>Delete</span></li>
                         </SettingMenuStyle>
                     </div>
                 </ChannelHeader>
             </div>
-            <HiddenCover visible={displaySetting} clickAction={toggelSetting}/>
+            <HiddenCover visible={displaySetting} clickAction={toggelSetting} />
         </ChannelItemStyle>
     )
 }

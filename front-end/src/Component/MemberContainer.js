@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import { AiOutlineAppstoreAdd, AiOutlineUsergroupAdd } from 'react-icons/ai';
+import { IoMdArrowRoundBack } from 'react-icons/io';
+import { Link } from 'react-router-dom';
 
 const TaskContainerStyle = styled.div`
     display: flex;
@@ -53,6 +55,11 @@ function MemberContainer(props) {
     return (
         <TaskContainerStyle>
             <TasksGroupeHeaderStyle>
+                {
+                    props.homeBackLink ?
+                    <Link to="/" > <IoMdArrowRoundBack/></Link>
+                    : ""
+                }
                 <h2>Members of {props.colomunTitle}</h2>
                 <div onClick={() => props.dispalayMemberModal()}>
                     <AiOutlineUsergroupAdd />

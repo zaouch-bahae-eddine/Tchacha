@@ -4,6 +4,7 @@ import Home from "./page/Home";
 import Member from "./page/Member";
 import Register from "./page/Register";
 import SignIn from "./page/SignIn";
+import Tchatchat from "./page/Tchatchat";
 
 function App() {
   return (
@@ -27,6 +28,10 @@ function App() {
 
             <Route exact path="/members/:id">
               <Member />
+            </Route>
+
+            <Route exact path="/messages/:id">
+              <Tchatchat />
             </Route>
 
           </Switch>

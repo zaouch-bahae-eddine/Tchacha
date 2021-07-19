@@ -48,7 +48,6 @@ function Member() {
 
     return (
         <div>
-            <Link to="/" > Retour</Link>
             <Fragment>
                 <Modal title="Ajouter membre" visible={displayAddMemberModal}
                     closeModal={closeMemberModal}
@@ -63,7 +62,7 @@ function Member() {
                     />
                 </Modal>
 
-                <MemberContainer colomunTitle={getChannelById.data.channel.name} dispalayMemberModal={dispalayMemberModal}>
+                <MemberContainer homeBackLink={true} colomunTitle={getChannelById.data.channel.name} dispalayMemberModal={dispalayMemberModal}>
                     {
                         data.members != null?
                         data.members.map(member => <MemberItem data={member} key={member.id} refetch={refetch} channelId={id} />)

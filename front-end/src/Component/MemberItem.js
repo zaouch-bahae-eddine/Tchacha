@@ -9,7 +9,7 @@ import FirstLetterDesign from './FirstLetterDesign'
 
 const MemberItemStyle = styled.div`
     display: flex;
-    width: 305px;
+    width: 275px;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 5px;
