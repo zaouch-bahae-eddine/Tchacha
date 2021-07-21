@@ -5,6 +5,7 @@ const TypeDef = gql`
         getChaneById(channelId: ID!) : Channel
         getChannels: [Channel]
         getMembers(channel: ID!): [User]
+        getMessage(channel: ID!) : [MessageComplet]
     }
 
     type Mutation {
@@ -21,7 +22,6 @@ const TypeDef = gql`
         addMessage(channel: ID!, text: String!): Message
         setMessage(msgId: ID!, text: String!): Message
         rmMessage(msgId: ID!): Message
-        getMessage(channel: ID!) : [Message]
     }
 
     type Error {
@@ -53,6 +53,11 @@ const TypeDef = gql`
         text: String
         user: Int,
         channel: Int
+    }
+
+    type MessageComplet{
+        message: Message,
+        user: User
     }
 
     type Token {

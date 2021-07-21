@@ -1,7 +1,7 @@
 const { QueryBuilder } = require('../db/Builder/Query');
 const MessageFormat = require('../db/DataFormat/Message');
 const UserChannelFormat = require('../db/DataFormat/UserChannel');
-
+const UserFormat = require('../db/DataFormat/User');
 const addMessage = async (user, channel, message) => {
     try {
         const existeUserInChannel = await QueryBuilder.findBy({ user: user.id, channel: channel }, UserChannelFormat);
@@ -51,7 +51,13 @@ const getMessage = async (user, channel) => {
         if(isMemeber === null){
             return null;
         }
-        return await QueryBuilder.findBy({channel: channel}, MessageFormat);
+        //const messages = await QueryBuilder.findBy({channel: channel}, MessageFormat);
+        const messages = await QueryBuilder.getMessage({channel: channel},{message: MessageFormat, user: UserFormat},MessageFormat);
+        console.log(messages);
+        if(messages != null && messages.length === undefined){
+            return [messages];
+        }
+        return messages;
     }catch(e){
         console.log(e);
         return null;

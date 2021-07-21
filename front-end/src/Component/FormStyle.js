@@ -9,8 +9,8 @@ export const FormStyle = styled.form`
     margin: 0 auto;
     padding: 22px;
     width: 220px;
-    background: #d3d3d352;
-    border-bottom: 5px #0000ff73 solid;
+    background: #eceefd;
+    border-bottom: 5px ##4452a6 solid;
     div{
         display: flex;
         flex-direction: column;
@@ -18,7 +18,7 @@ export const FormStyle = styled.form`
         padding: 5px;
         label{
             margin: 5px;
-            color: #0000ff73;
+            color: #4452a6;
         }
     }
     input {
@@ -31,11 +31,13 @@ export const FormStyle = styled.form`
         width: 210px;
         border: 1px lightgray solid;
         background-color: white;
-        color: #0000ff73;
+        color: #4452a6;
         cursor: pointer;
         transition: .3ms;
+        
+        border-radius: 7px;
         &:hover{
-            background-color: #0000ff73;
+            background-color: #4452a6;
             color: white;
             transition: .3ms;
         }

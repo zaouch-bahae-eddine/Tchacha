@@ -1,6 +1,6 @@
 const connection = require('../connection').promise();
 
-const { toDataFormat } = require('../../db/DataRowsToDataFormat');
+const { toDataFormat, toMultipleDataFormat } = require('../../db/DataRowsToDataFormat');
 
 const findAll = async (format) => {
     try {
@@ -112,6 +112,21 @@ const getChannels = async (condition, formatResult, formatCondition) => {
     console.log("resultat => ", result);
     return result;
 }
+const getMessage = async (condition, formatResult, formatCondition) => {
+    let where = " WHERE ( ";
+    for(const key in condition){
+        where += `\`${formatCondition.fields[key]}\` = ? AND `;
+    }
+    where = where.slice(0, -4);
+    where +=" )";
+    const query = "SELECT m.id as message_id, m.text as message_text, m.channel_id as message_channel_id, u.name as user_name, u.id as user_id, u.email as user_email FROM message AS m "+
+    "INNER JOIN user AS u ON m.user_id = u.id " + where;
+    console.log('query =>', query);
+    const [rows, allTodoFields] = await connection.query(query, Object.values(condition));
+    const result = toMultipleDataFormat(rows, formatResult);
+    console.log("resultat => ", result);
+    return result;
+}
 
 module.exports.QueryBuilder = {
     findAll,
@@ -121,5 +136,6 @@ module.exports.QueryBuilder = {
     deleteById,
     findBy,
     getMembers,
-    getChannels
+    getChannels,
+    getMessage
 }

@@ -87,7 +87,7 @@ function ChannelItem(props) {
                         <AiOutlineSetting />
                         <SettingMenuStyle color="#32d0ff" size="110px" visible={displaySetting}>
                             <li onClick={() => props.dispalayChannelModal(props.data)}><AiOutlineEdit /> <span>Edit</span></li>
-                            <li onClick={() => props.dispalayChannelModal(props.data)}><MembersLink to={"/members/" + props.data.id}><BiGroup /> <span>Membres</span></MembersLink></li>
+                            <MembersLink to={"/members/" + props.data.id}><li onClick={() => props.dispalayChannelModal(props.data)}><BiGroup /> <span>Membres</span></li></MembersLink>
                             <li onClick={() => deleteChannel(props.data.id)}><AiOutlineDelete /> <span>Delete</span></li>
                         </SettingMenuStyle>
                     </div>

@@ -1,16 +1,122 @@
-import React, { Fragment } from 'react'
+import { useMutation, useQuery } from '@apollo/client';
+import React, { Fragment, useState } from 'react'
 import { Redirect, useParams } from 'react-router-dom';
 import { useAuth } from '../Auth/AuthProvider'
+import MessageContainer from '../Component/MessageContainer';
+import MessageInput from '../Component/MessageInput';
+import MessageItem from '../Component/MessageItem';
+import Modal from '../Component/Modal';
+import MemberForm from '../Form/MemberFrom';
+import MessageForm from '../Form/MessageForm';
+import { GET_CHANNEL_BY_ID } from '../Queries/ChannelQuery';
+import { ADD_MESSAGE, GET_MESSAGE } from '../Queries/MessageQuery';
 
 function Tchatchat() {
     const auth = useAuth();
     const { id } = useParams();
+    const [displayModal, setDisplayModal] = useState(false);
+    const [formInput, setFormInput] = useState({
+        id: "",
+        message: ""
+    });
+    const handleInputChange = (e) => {
+        const target = e.target;
+        const name = target.name;
+        const value = target.value;
+        const formInputEdit = { ...formInput };
+        formInputEdit[name] = value;
+        console.log(formInputEdit);
+        setFormInput(formInputEdit);
+    }
+    const showModal = (data) => {
+        setFormInput({
+            id: data.id,
+            message: data.message
+        });
+        setDisplayModal(true);
+    }
+    const closeModal = () => {
+        setDisplayModal(false);
+    }
+    const [AddMessageMutation] = useMutation(ADD_MESSAGE);
+    const sendMessage = (message) => {
+        AddMessageMutation({
+            variables: {
+                addMessageChannel: id,
+                addMessageText: message
+            }
+        });
+    }
+
+    /* ADDING MEMBER */
+    const [displayAddMemberModal, setDisplayAddMemberModal] = useState(false);
+    const [memberFormInput, setMemberFormInput] = useState({
+        memberId: "",
+        memberName: "",
+        memberEmail: "",
+        channelId: id
+    });
+
+    const dispalayMemberModal = () => {
+        setDisplayAddMemberModal(true);
+    }
+    const closeMemberModal = () => {
+        setDisplayAddMemberModal(false);
+        resetMemberForm();
+    }
+
+    const resetMemberForm = () => {
+        const formInput = { ...memberFormInput };
+        formInput["memberEmail"] = "";
+        setMemberFormInput(formInput);
+    }
+    const handleInputMemberChange = (e) => {
+        const target = e.target;
+        const name = target.name;
+        const value = target.value;
+        const formInput = { ...memberFormInput };
+        formInput[name] = value;
+        console.log(formInput);
+        setMemberFormInput(formInput);
+    }
+    /* ADDING MEMBER */
+    const { loading, error, data, refetch } = useQuery(GET_MESSAGE, { 
+        variables: { getMessageChannel: id },
+        pollInterval: 3000,
+    });
+    const channel = useQuery(GET_CHANNEL_BY_ID, { variables: { getChaneByIdChannelId: id } })
+    if (loading || channel.loading) return <div>Loding ...</div>;
+    if (error || channel.error) return error;
     return (
         <Fragment>
             {
-                auth.user != null ?
-                    <button onClick={(e) => { e.preventDefault(); auth.logout(); }}>Log out</button>
-                    : <Redirect to="/" />
+                auth.user == null ?
+                    <Redirect to="/" />
+                    : <Fragment>
+                        <Modal visible={displayModal} title="Modifier Message" closeModal={closeModal} >
+                            <MessageForm formInput={formInput} handleInputChange={handleInputChange} refetch={refetch} close={closeModal} />
+                        </Modal>
+                        <Modal title="Ajouter membre" visible={displayAddMemberModal}
+                            closeModal={closeMemberModal}
+                        >
+                            <MemberForm
+                                type="add"
+                                formInput={memberFormInput}
+                                handleInputChange={handleInputMemberChange}
+                                resetForm={resetMemberForm}
+                                refetch={refetch}
+                                closeMemberModal={closeMemberModal}
+                            />
+                        </Modal>
+                        <MessageContainer homeBackLink={true} columnTitle={channel.data.channel.name} dispalayMemberModal={dispalayMemberModal}>
+                            {
+                                data.messages.map(msg => {
+                                    return (<MessageItem key={msg.message.id} data={msg} showModal={showModal} refetch={refetch} />)
+                                })
+                            }
+                            <MessageInput refetch={refetch} send={sendMessage} />
+                        </MessageContainer>
+                    </Fragment>
             }
         </Fragment>
     )

@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import { AuthProvider } from "./Auth/AuthProvider";
+import LogoutBar from "./Component/LogoutBar";
 import Home from "./page/Home";
 import Member from "./page/Member";
 import Register from "./page/Register";
@@ -9,7 +10,9 @@ import Tchatchat from "./page/Tchatchat";
 function App() {
   return (
     <div className="App">
+      
       <AuthProvider>
+        <LogoutBar/>
         <Router>
           <Switch>
 
