@@ -1,10 +1,12 @@
 import { useQuery } from '@apollo/client';
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
+import { Redirect } from 'react-router-dom';
 import ChannelContainer from '../Component/ChannelContainer';
 import ChannelItem from '../Component/ChannelItem';
 import Modal from '../Component/Modal';
 import ChannelForm from '../Form/ChannelForm';
 import { GET_CHANNEL } from '../Queries/ChannelQuery';
+import {useAuth} from '../Auth/AuthProvider';
 
 function Channel() {
     const [displayAddChannelModal, setDisplayAddChannelModal] = useState(false);
@@ -13,11 +15,16 @@ function Channel() {
         id: "",
         channelName: "",
     });
-
-    const { loading, error, data, refetch } = useQuery(GET_CHANNEL);
+    const auth = useAuth();
+    const { loading, error, data, refetch } = useQuery(GET_CHANNEL, {
+        pollInterval: 3000,
+    });
+    useEffect(() => {
+        refetch();
+        console.log('the first rerender', auth.user.id);
+    }, []);
     if (loading) return 'Loading...';
     if (error) return `Error! ${error.message}`;
-
     const dispalayChannelModal = (data) => {
         if (data !== undefined) {
             setDisplaySetChannelModal(true);
@@ -51,6 +58,7 @@ function Channel() {
     }
     return (
         <Fragment>
+
             <Modal title="Ajouter channel" visible={displayAddChannelModal}
                 closeModal={closeChannelModal}
             >
