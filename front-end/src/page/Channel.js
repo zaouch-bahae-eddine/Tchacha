@@ -1,6 +1,5 @@
 import { useQuery } from '@apollo/client';
-import React, { Fragment, useEffect, useState } from 'react'
-import { Redirect } from 'react-router-dom';
+import React, { Fragment, useEffect, useState } from 'react';
 import ChannelContainer from '../Component/ChannelContainer';
 import ChannelItem from '../Component/ChannelItem';
 import Modal from '../Component/Modal';
