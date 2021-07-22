@@ -63,7 +63,7 @@ const ToMessagesStyle = styled(Link)`
     position: absolute;
     width: 230px;
     height: 51px;
-    z-index: 9;
+    z-index: 8;
 `;
 function ChannelItem(props) {
     const [displaySetting, setDisplaySetting] = useState(false);
