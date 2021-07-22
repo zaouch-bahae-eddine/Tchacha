@@ -50,25 +50,18 @@ const AddTaskStyle = styled.div`
 `;
 
 function ChannelContainer(props) {
-/*     const [displaySetting, setDisplaySetting] = useState(false);
-    const toggelSetting = () => {
-        setDisplaySetting((prev) => !prev);
-    } */
+
     return (
         <TaskContainerStyle>
             <TasksGroupeHeaderStyle>
                 <h2>{props.colomunTitle} Channels</h2>
                 <div onClick={() => props.dispalayChannelModal()}>
                 <AiOutlineAppstoreAdd />
-{/*                     <TasksGroupeSettingStyle color="#4452a6" visible={displaySetting}>
-                        <li><AiOutlineEdit /> <span>Edit Name</span></li>
-                        <li><AiOutlineDelete /> <span>Delete Groupe</span></li>
-                    </TasksGroupeSettingStyle> */}
+
                 </div>
             </TasksGroupeHeaderStyle>
             {props.children}
             <AddTaskStyle onClick={() => props.dispalayChannelModal()}> <AiOutlineAppstoreAdd /> <span>Add a channel</span></AddTaskStyle>
-            {/* <HiddenCover visible={displaySetting} clickAction={toggelSetting} /> */}
         </TaskContainerStyle>
     )
 }

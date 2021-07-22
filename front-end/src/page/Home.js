@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../Auth/AuthProvider';
-import Tchatchat from './Tchatchat';
 import Channel from './Channel';
 const TaskContainerStyle = styled.div`
     align-items: center;
