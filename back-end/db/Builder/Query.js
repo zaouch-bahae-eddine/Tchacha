@@ -120,7 +120,7 @@ const getMessage = async (condition, formatResult, formatCondition) => {
     where = where.slice(0, -4);
     where +=" )";
     const query = "SELECT m.id as message_id, m.text as message_text, m.channel_id as message_channel_id, u.name as user_name, u.id as user_id, u.email as user_email FROM message AS m "+
-    "INNER JOIN user AS u ON m.user_id = u.id " + where;
+    "INNER JOIN user AS u ON m.user_id = u.id " + where + " ORDER BY m.id";
     console.log('query =>', query);
     const [rows, allTodoFields] = await connection.query(query, Object.values(condition));
     const result = toMultipleDataFormat(rows, formatResult);
