@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import styled from 'styled-components';
 import { useAuth } from '../Auth/AuthProvider';
 import { FaEllipsisV } from "react-icons/fa";
@@ -7,6 +7,7 @@ import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai';
 import HiddenCover from './HiddenCover';
 import { useMutation } from '@apollo/client';
 import { DELETE_MESSAGE } from '../Queries/MessageQuery';
+import { Redirect } from 'react-router-dom';
 const MessageItemStyle = styled.div`
     display: flex;
     position: relative;
@@ -64,30 +65,36 @@ function MessageItem(props) {
 
     })
     return (
-        <MessageItemStyle className={auth.user.id == props.data.user.id ? "owner" : "other"}>
-            <AuthorNameStyle>
-                {props.data.user.name}
-                {auth.user.id == props.data.user.id ? 
-                <div onClick={() => toggelSetting()}>
-                    <FaEllipsisV />
-                    <SettingMenuStyle color="#4452a6" size="110px" visible={displaySetting}>
-                        <li onClick={() => props.showModal({id: props.data.message.id, 
-                            message: props.data.message.text})}>
-                                <AiOutlineEdit /> <span>Edit</span></li>
-                        <li onClick={() => deleteMessageMutation({variables: {
-                            rmMessageMsgId: props.data.message.id
-                        }})}>
-                            <AiOutlineDelete /> <span>Delete</span></li>
-                    </SettingMenuStyle>
-                </div>
-                : ""}
-            </AuthorNameStyle>
-            <i>{props.data.user.email}</i>
-            <MessageStyle>
-                {props.data.message.text}
-            </MessageStyle>
-            <HiddenCover visible={displaySetting} clickAction={toggelSetting} />
-        </MessageItemStyle>
+        <Fragment>        
+            <MessageItemStyle className={auth.user.id == props.data.user.id ? "owner" : "other"}>
+                <AuthorNameStyle>
+                    {props.data.user.name}
+                    {auth.user.id == props.data.user.id ?
+                        <div onClick={() => toggelSetting()}>
+                            <FaEllipsisV />
+                            <SettingMenuStyle color="#4452a6" size="110px" visible={displaySetting}>
+                                <li onClick={() => props.showModal({
+                                    id: props.data.message.id,
+                                    message: props.data.message.text
+                                })}>
+                                    <AiOutlineEdit /> <span>Edit</span></li>
+                                <li onClick={() => deleteMessageMutation({
+                                    variables: {
+                                        rmMessageMsgId: props.data.message.id
+                                    }
+                                })}>
+                                    <AiOutlineDelete /> <span>Delete</span></li>
+                            </SettingMenuStyle>
+                        </div>
+                        : ""}
+                </AuthorNameStyle>
+                <i>{props.data.user.email}</i>
+                <MessageStyle>
+                    {props.data.message.text}
+                </MessageStyle>
+                <HiddenCover visible={displaySetting} clickAction={toggelSetting} />
+            </MessageItemStyle>
+        </Fragment>
     )
 }
 

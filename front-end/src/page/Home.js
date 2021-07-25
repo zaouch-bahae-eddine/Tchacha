@@ -1,8 +1,7 @@
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { useAuth } from '../Auth/AuthProvider';
-import Channel from './Channel';
 const TaskContainerStyle = styled.div`
     align-items: center;
     width: 320px;
@@ -17,6 +16,7 @@ const HomeTitle = styled.h1`
 `;
 const SignLink = styled(Link)`
     text-decoration: none;
+    color: #4452a6;
     & > div {
         font-size: 16pt;
         text-align: center;
@@ -46,7 +46,7 @@ function Home() {
                             <TaskContainerStyle>Sign up </TaskContainerStyle>
                         </SignLink>
                     </Fragment>
-                    : <Channel />
+                    : <Redirect to="/channel" />
             }
         </Fragment>
     )

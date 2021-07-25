@@ -19,15 +19,22 @@ function SignIn() {
     const loginHandler = async (e) => {
         e.preventDefault();
         if (auth.user == null) {
-            console.log(credential);
-            const result = await auth.login(credential.email, credential.password);
-            if (result.status > 400) {
-                const msg = {
-                    display: true,
-                    msg: result.msg
+            try{
+                const result = await auth.login(credential.email, credential.password);
+                if (result.status > 400) {
+                    const msg = {
+                        display: true,
+                        msg: result.msg
+                    }
+                    setAlertMessage(msg);
                 }
-                setAlertMessage(msg);
+            } catch(e){
+                return (JSON.stringify(e));
+                if(e.message == "Failed to fetch"){
+                    alert('fitch');
+                }
             }
+
         }
     }
     const inputChangeHandler = (e) => {
@@ -41,7 +48,7 @@ function SignIn() {
             <TitleStyle>Sign in</TitleStyle>
             <FormStyle>
                 {
-                    auth.user != null ? <Redirect to="/" /> : ""
+                    auth.user != null ? <Redirect to="/channel" /> : ""
                 }
                 {
                     alertMessage.display ? <AlertMessage message={alertMessage.msg} /> : ""

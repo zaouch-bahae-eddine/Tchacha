@@ -25,7 +25,7 @@ const useProvideAuth = () => {
         }
     }, [])
 
-    const [LoginMutation, {data}] = useMutation(LOGIN, {
+    const [LoginMutation, {data, error: mutationError}] = useMutation(LOGIN, {
         onCompleted: (data) => {
             if(data.login.status === 200){
                 localStorage.setItem('token', data.login.jwt);
@@ -42,8 +42,16 @@ const useProvideAuth = () => {
         }
     });
     const login = async (email, password) => {
-        const result = await LoginMutation({variables: {loginEmail: email, loginPassword: password}});
-        return result.data.login;
+        try{
+            const result = await LoginMutation({variables: {loginEmail: email, loginPassword: password}});
+            return result.data.login;
+        } catch(e){
+            let msg = '';
+            if(e.message == "Failed to fetch"){
+                msg = "Connexion échouée"
+            }
+            return {status: 500, msg: msg};
+        }
     };
 
     const register = async (credetial) => {
@@ -56,7 +64,11 @@ const useProvideAuth = () => {
             console.log(result);
             return result.data.register;
         } catch(e) {
-            console.log(e);
+            let msg = '';
+            if(e.message == "Failed to fetch"){
+                msg = "Connexion échouée"
+            }
+            return {status: 500, msg: msg};
         }
     };
 

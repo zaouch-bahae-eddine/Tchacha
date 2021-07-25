@@ -76,3 +76,12 @@ export const GET_CHANNEL_BY_ID = gql`
         }
     }
 `;
+export const GET_CHANNEL_OWNER = gql`
+    query Query($getChannelOwnerChannelId: ID!) {
+        owner: getChannelOwner(channelId: $getChannelOwnerChannelId) {
+            id
+            name
+            email
+        }
+    }
+`;

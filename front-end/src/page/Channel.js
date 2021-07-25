@@ -6,6 +6,10 @@ import Modal from '../Component/Modal';
 import ChannelForm from '../Form/ChannelForm';
 import { GET_CHANNEL } from '../Queries/ChannelQuery';
 import {useAuth} from '../Auth/AuthProvider';
+import { Redirect } from 'react-router-dom';
+import PopupAlert from '../Component/PopupAlert/PopupAlert.js';
+import Close from '../Component/PopupAlert/img/close.png';
+import Spiner from "../Component/Spiner/Spiner";
 
 function Channel() {
     const [displayAddChannelModal, setDisplayAddChannelModal] = useState(false);
@@ -15,15 +19,27 @@ function Channel() {
         channelName: "",
     });
     const auth = useAuth();
-    const { loading, error, data, refetch } = useQuery(GET_CHANNEL, {
-        pollInterval: 3000,
-    });
+    const { loading, error, data, refetch, startPolling, stopPolling } = useQuery(GET_CHANNEL);
     useEffect(() => {
         refetch();
-        console.log('the first rerender', auth.user.id);
     }, []);
-    if (loading) return 'Loading...';
-    if (error) return `Error! ${error.message}`;
+
+    useEffect(() => {
+        startPolling(3000);
+        return () => stopPolling();
+    }, [startPolling, stopPolling]);
+
+    if (loading) return <Spiner duration="1s" size="10px" color="#eceefd"/>;
+    if (error){
+        if(error.message == "Failed to fetch"){
+            return <PopupAlert icon={Close} msg="Connexion échouée" />
+        } else if (error.message == "You must be connected !") {
+             stopPolling();
+             auth.logout();
+            return <PopupAlert icon={Close} msg={error.message} redirectTo="/signin" buttonLabel="Sign in" />;
+        }
+        return <PopupAlert icon={Close} msg={error.message} redirectTo="/signin" buttonLabel="Sign in" />;
+    }
     const dispalayChannelModal = (data) => {
         if (data !== undefined) {
             setDisplaySetChannelModal(true);
@@ -36,7 +52,6 @@ function Channel() {
         } else {
             setDisplayAddChannelModal(true);
             resetChannelForm();
-            console.log(channelFormInput);
         }
     }
     const closeChannelModal = () => {
@@ -52,12 +67,11 @@ function Channel() {
         const value = target.value;
         const formInputEdit = { ...channelFormInput };
         formInputEdit[name] = value;
-        console.log(formInputEdit);
         setChannelFormInput(formInputEdit);
     }
     return (
         <Fragment>
-
+            {auth.user == null ? <Redirect to="/" /> : ""}
             <Modal title="Ajouter channel" visible={displayAddChannelModal}
                 closeModal={closeChannelModal}
             >

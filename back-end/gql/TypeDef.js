@@ -6,6 +6,7 @@ const TypeDef = gql`
         getChannels: [Channel]
         getMembers(channel: ID!): [User]
         getMessage(channel: ID!) : [MessageComplet]
+        getChannelOwner(channelId: ID!) : User
     }
 
     type Mutation {

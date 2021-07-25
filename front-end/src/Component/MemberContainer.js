@@ -57,16 +57,24 @@ function MemberContainer(props) {
             <TasksGroupeHeaderStyle>
                 {
                     props.homeBackLink ?
-                    <Link to="/" > <IoMdArrowRoundBack/></Link>
-                    : ""
+                        <Link to="/" > <IoMdArrowRoundBack /></Link>
+                        : ""
                 }
                 <h2>Members of {props.colomunTitle}</h2>
-                <div onClick={() => props.dispalayMemberModal()}>
-                    <AiOutlineUsergroupAdd />
-                </div>
+                {
+                    props.owner ?
+                        <div onClick={() => props.dispalayMemberModal()}>
+                            <AiOutlineUsergroupAdd />
+                        </div>
+                        : <div></div>
+                }
             </TasksGroupeHeaderStyle>
             {props.children}
-            <AddTaskStyle onClick={() => props.dispalayMemberModal()}> <AiOutlineUsergroupAdd /> <span>Add a member</span></AddTaskStyle>
+            {
+                props.owner ?
+                    <AddTaskStyle onClick={() => props.dispalayMemberModal()}> <AiOutlineUsergroupAdd /> <span>Add a member</span></AddTaskStyle>
+                : ""
+            }
         </TaskContainerStyle>
     )
 }

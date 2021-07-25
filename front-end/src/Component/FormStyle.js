@@ -8,9 +8,9 @@ export const FormStyle = styled.form`
     max-width: 520px;
     margin: 0 auto;
     padding: 22px;
-    width: 220px;
+    width: 276px;
     background: #eceefd;
-    border-bottom: 5px ##4452a6 solid;
+    border-radius: 10px;
     div{
         display: flex;
         flex-direction: column;

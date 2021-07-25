@@ -24,13 +24,16 @@ const MemberItemStyle = styled.div`
     }
 `;
 const MemberDataStyle = styled.div`
+    width: 170px;
+    overflow: hidden;
+    color: #4452a6;
+    i{
+        font-size: 9pt;
+    }
     p{
         margin: 0;
         padding: 2px 17px;
         font-size: 11pt;
-    }
-    p:firstChild{
-        font-weight: bolder;
     }
 `;
 const LigneSeparatorStyle = styled.div`
@@ -49,8 +52,8 @@ const DeleteMemberStyle = styled.div`
 function MemberItem(props) {
     const [deleteMemberMutaion] = useMutation(DELETE_MEMBER);
     const auth = useAuth()
-    const deleteMember = (email, channel) => {
-        deleteMemberMutaion({variables:{rmMemberFromChannelEmail: email, rmMemberFromChannelChannel: channel}});
+    const deleteMember = async (email, channel) => {
+        await deleteMemberMutaion({variables:{rmMemberFromChannelEmail: email, rmMemberFromChannelChannel: channel}});
         props.refetch();
     }
     return (
@@ -60,11 +63,11 @@ function MemberItem(props) {
                     <FirstLetterDesign word={props.data.name} />
                     <MemberDataStyle>
                         <p>{props.data.name}</p>
-                        <p>{props.data.email}</p>
+                        <p><i>{props.data.email}</i></p>
                     </MemberDataStyle>
                 </div>
                 {
-                    auth.user.id != props.data.id ? 
+                    (props.owner || props.data.id == auth.user.id) ? 
                     <DeleteMemberStyle onClick={() => deleteMember(props.data.email, props.channelId)}><AiOutlineUserDelete/></DeleteMemberStyle>
                     : <DeleteMemberStyle><RiAdminLine/></DeleteMemberStyle>
                 }
