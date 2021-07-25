@@ -95,7 +95,6 @@ function Tchatchat() {
     if (loading || channel.loading) return <Spiner duration="1s" size="10px" color="#eceefd"/>;
     if (error || channel.error) {
         if (error.message == "Failed to fetch") {
-            alert('cnx');
             return <PopupAlert icon={Close} msg="Connexion échouée" />
         } else if (error.message == "You must be connected !") {
             stopPolling();
