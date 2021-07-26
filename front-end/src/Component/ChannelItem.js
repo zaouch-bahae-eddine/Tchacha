@@ -55,7 +55,8 @@ const ChannelHeader = styled.div`
     }
 `;
 const ChannelNameStyle = styled.div`
-    font-size: 18pt;
+    font-size: 13pt;
+    color: #4452a6;
     width: 90%;
 `;
 const ToMessagesStyle = styled(Link)`
