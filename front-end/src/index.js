@@ -10,7 +10,7 @@ import {
 import { setContext } from '@apollo/client/link/context';
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:4000/',
+  uri: 'https://chat-0rdz.onrender.com/',
 });
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('token');
